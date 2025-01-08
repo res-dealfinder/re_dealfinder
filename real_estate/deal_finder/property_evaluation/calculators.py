@@ -1,6 +1,7 @@
 from math import log10
 
 # Define constants for dictionary keys
+ID = 'id'
 STREET = 'street'
 CITY = 'city'
 ZIP_CODE = 'zip_code'
@@ -207,31 +208,31 @@ property_data = {
 }
 
 #testing example using row 4 on Property Evaluations sheet
-test = PropertyEvaluation(property_data)
-print("down_payment: ", test.cal_down_payment())
-print("total_cost: ", test.cal_total_cost())
-print("loan_amount: ", test.cal_loan_amount())
-print("monthly_mortgage: ", test.cal_monthly_mortgage())
-print("monthly_property_tax: ", test.cal_monthly_property_tax())
-print("monthly_insurance: ", test.add_monthly_insurance(600))
-print("monthly_utilities: ", test.add_monthly_utilities(300))
-print("monthly_fees: ", test.add_monthly_fees(0))
-print("total_monthly_cost: ", test.cal_total_monthly_cost())
-print("actual_monthly_rental_income: ", test.add_actual_monthly_rental_income(3600))
-print("actual_net: ", test.cal_actual_net())
-print("actual_annual_net: ", test.cal_actual_annual_net())
-print("actual_ROI: ", test.cal_actual_ROI())
-print("actual_DCSR: ", test.cal_actual_DCSR())
-print("cal_actual_income_over_debt: ", test.cal_actual_income_over_debt())
-print("cal_actual_cap_rate: ", test.cal_actual_cap_rate())
-print("add_projected_monthly_rental_income: ", test.add_projected_monthly_rental_income(6280))
-print("cal_project_net: ", test.cal_project_net())
-print("cal_projected_annual_net: ", test.cal_projected_annual_net())
-print("cal_projected_ROI: ", test.cal_projected_ROI())
-print("cal_projected_DCSR: ", test.cal_projected_DCSR())
-print("cal_projected_income_over_debt: ", test.cal_projected_income_over_debt())
-print("cal_projected_cap_rate: ", test.cal_projected_cap_rate())
-print("cal_years_until_maxed_rents: ", test.cal_years_until_maxed_rents())
+# test = PropertyEvaluation(property_data)
+# print("down_payment: ", test.cal_down_payment())
+# print("total_cost: ", test.cal_total_cost())
+# print("loan_amount: ", test.cal_loan_amount())
+# print("monthly_mortgage: ", test.cal_monthly_mortgage())
+# print("monthly_property_tax: ", test.cal_monthly_property_tax())
+# print("monthly_insurance: ", test.add_monthly_insurance(600))
+# print("monthly_utilities: ", test.add_monthly_utilities(300))
+# print("monthly_fees: ", test.add_monthly_fees(0))
+# print("total_monthly_cost: ", test.cal_total_monthly_cost())
+# print("actual_monthly_rental_income: ", test.add_actual_monthly_rental_income(3600))
+# print("actual_net: ", test.cal_actual_net())
+# print("actual_annual_net: ", test.cal_actual_annual_net())
+# print("actual_ROI: ", test.cal_actual_ROI())
+# print("actual_DCSR: ", test.cal_actual_DCSR())
+# print("cal_actual_income_over_debt: ", test.cal_actual_income_over_debt())
+# print("cal_actual_cap_rate: ", test.cal_actual_cap_rate())
+# print("add_projected_monthly_rental_income: ", test.add_projected_monthly_rental_income(6280))
+# print("cal_project_net: ", test.cal_project_net())
+# print("cal_projected_annual_net: ", test.cal_projected_annual_net())
+# print("cal_projected_ROI: ", test.cal_projected_ROI())
+# print("cal_projected_DCSR: ", test.cal_projected_DCSR())
+# print("cal_projected_income_over_debt: ", test.cal_projected_income_over_debt())
+# print("cal_projected_cap_rate: ", test.cal_projected_cap_rate())
+# print("cal_years_until_maxed_rents: ", test.cal_years_until_maxed_rents())
 
-for key, value in test.property.items():
-    print(f"{key} : {value}")
+# for key, value in test.property.items():
+#     print(f"{key} : {value}")

@@ -1,28 +1,17 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-import { Input } from "@/components/ui/input";
-import * as React from "react";
-
+import React, { useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  SortingState,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -34,82 +23,124 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { DataTablePagination } from "./data-table-pagination";
+import { DataTableToolbar } from "./data-table-toolbar";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export default function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({
+      // street: false,
+      // city: false,
+      // zip_code: false,
+      // online_link: false,
+      year_built: false,
+      // asking_price: false,
+      // offer_price: false,
+      info: false,
+      down_payment_percentage: false,
+      renovations: false,
+      closing_cost: false,
+      interest_rate: false,
+      years: false,
+      property_tax_rate: false,
+      property_sqft: false,
+      lot_sqft: false,
+      section8: false,
+      lease: false,
+      disclosure_or_inspections: false,
+      down_payment: false,
+      loan_amount: false,
+      total_cost: false,
+      monthly_mortgage: false,
+      monthly_property_taxes: false,
+      monthly_insurance: false,
+      monthly_utilities: false,
+      monthly_fees: false,
+      total_monthly_cost: false,
+      actual_monthly_rental_income: false,
+      actual_net: false,
+      actual_annual_net: false,
+      // actual_roi: false,
+      actual_dcsr: false,
+      actual_income_over_debt: false,
+      actual_cap_rate: false,
+      projected_monthly_rental_income: false,
+      project_net: false,
+      projected_annual_net: false,
+      projected_roi: false,
+      projected_dcsr: false,
+      projected_income_over_debt: false,
+      projected_cap_rate: false,
+      years_until_maxed_rents: false,
+    });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [stateData, setStateData] = useState(data);
+  const [editedRows, setEditedRows] = useState({});
 
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
+      columnFilters,
+    },
+    enableRowSelection: true,
+    getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    meta: {
+      editedRows,
+      setEditedRows,
+      revertData: (rowIndex: number, revert: boolean) => {
+        if (revert) {
+          setStateData((old) =>
+            old.map((row, index) =>
+              index === rowIndex ? stateData[rowIndex] : row
+            )
+          );
+        } else {
+          setStateData((old) =>
+            old.map((row, index) =>
+              index === rowIndex ? stateData[rowIndex] : row
+            )
+          );
+        }
+      },
+      updateData: (rowIndex: number, columnId: string, value: string) => {
+        setStateData((old) =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              return {
+                ...old[rowIndex],
+                [columnId]: value,
+              };
+            }
+            return row;
+          })
+        );
+      },
     },
   });
 
   return (
-    <>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Search..."
-          value={(table.getColumn("city")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => {
-            console.log(event.target.value);
-            table.getColumn("city")?.setFilterValue(event.target.value);
-          }}
-          className="max-w-sm"
-        />
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                    onSelect={(event) => {
-                      event.preventDefault();
-                    }}
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+    <div className="space-y-4">
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -153,32 +184,14 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {"No data results"}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
-    </>
+      <DataTablePagination table={table} />
+    </div>
   );
 }
